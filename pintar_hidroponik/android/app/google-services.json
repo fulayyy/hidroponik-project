@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "282590163423",
+    "project_id": "pintarhidroponik",
+    "storage_bucket": "pintarhidroponik.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282590163423:android:efe51197123fea54d7946a",
+        "android_client_info": {
+          "package_name": "com.example.pintar_hidroponik"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy9upxm9FbtQEUAcSDAnZ4HGM0Voi3cbM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
