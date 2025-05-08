@@ -10,6 +10,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,6 +34,25 @@ class _MonitoringPageState extends State<MonitoringPage> {
   int tinggiAir = 0;
   int nutrisi = 0;
   bool isAuto = false;
+
+  String selectedPlant = "Bayam Merah"; // Default pilihan tanaman
+  final Map<String, Map<String, dynamic>> plantDetails = {
+    "Bayam Merah": {
+      "instructions": "1. Siapkan benih bayam merah.\n2. Rendam benih selama 24 jam.\n3. Pindahkan ke media tanam hidroponik.\n4. Pastikan pH air 6.0-7.0 dan suhu 20-25°C.",
+      "ppm_min": 800,
+      "ppm_max": 1200,
+    },
+    "Sawi": {
+      "instructions": "1. Siapkan benih sawi.\n2. Rendam benih selama 12 jam.\n3. Pindahkan ke media tanam hidroponik.\n4. Pastikan pH air 6.0-6.5 dan suhu 18-24°C.",
+      "ppm_min": 1000,
+      "ppm_max": 1400,
+    },
+    "Kangkung": {
+      "instructions": "1. Siapkan benih kangkung.\n2. Rendam benih selama 8 jam.\n3. Pindahkan ke media tanam hidroponik.\n4. Pastikan pH air 6.5-7.5 dan suhu 25-30°C.",
+      "ppm_min": 600,
+      "ppm_max": 1000,
+    },
+  };
 
   @override
   void initState() {
@@ -58,8 +79,28 @@ class _MonitoringPageState extends State<MonitoringPage> {
     firestore.collection("monitoring").doc("data").update({"otomatis": value});
   }
 
+  void showPlantInstructions(String plant) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Petunjuk Menanam $plant"),
+          content: Text(plantDetails[plant]?["instructions"] ?? "Petunjuk tidak tersedia."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Tutup"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final selectedPlantDetails = plantDetails[selectedPlant];
+
     return Scaffold(
       appBar: AppBar(title: const Text("Menu Monitoring")),
       body: SingleChildScrollView(
@@ -110,6 +151,59 @@ class _MonitoringPageState extends State<MonitoringPage> {
                 updateOtomatis(value);
               },
             ).animate().fadeIn(duration: 1000.ms).slideY(begin: 0.3),
+            const SizedBox(height: 20),
+            DropdownButtonFormField<String>(
+              value: selectedPlant,
+              decoration: const InputDecoration(
+                labelText: "Pilih Tanaman",
+                border: OutlineInputBorder(),
+              ),
+              items: plantDetails.keys.map((plant) {
+                return DropdownMenuItem(
+                  value: plant,
+                  child: Text(plant),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() {
+                    selectedPlant = value;
+                  });
+                  showPlantInstructions(value);
+                }
+              },
+            ),
+            const SizedBox(height: 20),
+            if (selectedPlantDetails != null)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.green),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Informasi Nutrisi untuk $selectedPlant",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "PPM Minimum: ${selectedPlantDetails["ppm_min"]} ppm",
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    Text(
+                      "PPM Maksimum: ${selectedPlantDetails["ppm_max"]} ppm",
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),

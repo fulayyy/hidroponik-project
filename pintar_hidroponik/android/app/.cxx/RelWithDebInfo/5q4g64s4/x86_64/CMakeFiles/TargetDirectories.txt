@@ -1,0 +1,2 @@
+C:/Users/Ghiyazt/Documents/GitHub/hidroponik-project/pintar_hidroponik/android/app/.cxx/RelWithDebInfo/5q4g64s4/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Ghiyazt/Documents/GitHub/hidroponik-project/pintar_hidroponik/android/app/.cxx/RelWithDebInfo/5q4g64s4/x86_64/CMakeFiles/rebuild_cache.dir
